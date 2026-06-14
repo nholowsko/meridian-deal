@@ -392,8 +392,13 @@ function solve(d, fn){ // find price where fn(price)=0 via bisection (fn decreas
 }
 function priceForCap(d, cap){ return solve(d, p => noiAt(d,p).noi/p - cap); }
 function breakEvenPrice(d){ return solve(d, p => metricsAt(d,p).cf); } // cf=0
-// Walk-away ceiling: price where the unleveraged yield drops to your opportunity cost.
-function ceilingPrice(d){ return priceForCap(d, d.oppRate); }
+// Walk-away ceiling: price where the building's TOTAL unleveraged return (income yield + appreciation)
+// drops to your opportunity cost. Compares like-for-like (total vs total), not income-yield vs total-return.
+function ceilingPrice(d){
+  const yieldNeeded = d.oppRate - d.appr; // income yield needed so income + appreciation matches the alternative
+  if(yieldNeeded <= 0.0025) return Infinity; // appreciation alone meets/beats the alternative -> no finite ceiling
+  return priceForCap(d, yieldNeeded);
+}
 
 // ---- projection ----
 function project(d, price, mode){
@@ -446,9 +451,10 @@ function render(){
 
   // price boxes
   const pT=priceForCap(d,d.targetCap), pB=breakEvenPrice(d), pC=ceilingPrice(d);
+  const pcFinite = isFinite(pC);
   $('pTarget').textContent = fmt$(pT);
   $('pBreak').textContent = finMode==="cash"?"n/a":fmt$(pB);
-  $('pCeiling').textContent = fmt$(pC);
+  $('pCeiling').textContent = pcFinite ? fmt$(pC) : "no limit";
   $('recPrice').textContent = fmt$(pT);
 
   // verdict text
@@ -456,7 +462,9 @@ function render(){
   let v=`At <b>${fmt$(d.price)}</b>, the building earns about <b>${fmtPct(m.cap*100)}</b> a year if paid in cash. `;
   v+= m.cf>=0 ? `After ${finMode==="cash"?"expenses":"the mortgage"}, it puts <b class="pos">${fmt$(m.cf/12)}/month</b> in your pocket. ` :
                 `After ${finMode==="cash"?"expenses":"the mortgage"}, it would cost <b class="neg">${fmt$(-m.cf/12)}/month</b> out of pocket. `;
-  v+= `A price around <b>${fmt$(pT)}</b> hits the return you want. It still comes out even up to <b>${fmt$(pB)}</b>, and above <b>${fmt$(pC)}</b> the money would do better invested elsewhere.`;
+  v+= `A price around <b>${fmt$(pT)}</b> hits the return you want. It still comes out even up to <b>${fmt$(pB)}</b>`;
+  v+= pcFinite ? `, and above <b>${fmt$(pC)}</b> the money would do better invested elsewhere.`
+              : `. The building's income plus ${(d.appr*100).toFixed(1)}% appreciation beats your ${(d.oppRate*100).toFixed(1)}% alternative at any sensible price, so there's no walk-away ceiling on returns alone.`;
   $('verdict').innerHTML = v;
 
   // NOI table
