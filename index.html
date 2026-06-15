@@ -208,7 +208,7 @@
       <div class="card">
         <h2>Your goals & outlook</h2>
         <div class="row"><label>Return you want (%)<span class="hint">the yearly return that makes this worth doing</span></label><input type="number" id="targetCap" value="7.0" step="0.1"></div>
-        <div class="row"><label>What the cash could earn elsewhere (%)<span class="hint">stocks ≈ 8% (long-run S&P ~10%, trimmed for caution). This is the key lever — set it to what you'd really do with the money.</span></label><input type="number" id="oppRate" value="8.0" step="0.1"></div>
+        <div class="row"><label>What the cash could earn elsewhere (%)<span class="hint">stocks about 8% (long-run S&P near 10%, trimmed for caution). This is the most important number; set it to what you'd really do with the money.</span></label><input type="number" id="oppRate" value="8.0" step="0.1"></div>
         <div class="row"><label>Home value goes up each year (%)<span class="hint">local appreciation trend</span></label><input type="number" id="appr" value="3.0" step="0.1"></div>
         <div class="row"><label>Years you'd hold it<span class="hint">before selling</span></label><input type="number" id="hold" value="10" step="1"></div>
         <div class="row"><label>Cost to sell later (%)<span class="hint">agent fees, etc. when you sell</span></label><input type="number" id="sellCost" value="6" step="0.5"></div>
@@ -262,7 +262,7 @@
         <div class="verdict" id="cmVerdict" style="margin-bottom:12px"></div>
         <table id="cmTable"><tbody></tbody></table>
         <div class="chartbox" style="margin-top:14px"><canvas id="wealthChart"></canvas></div>
-        <div class="src" style="margin-top:10px"><b>Reading this chart:</b> the side axis is your total net worth in dollars (k = thousands); the bottom axis is years from now. Each line is one path. The line sitting highest at the final year is the option that leaves you richest. <b>Buy with cash</b> (blue) ties up the most money but carries no loan. <b>Buy with a mortgage</b> (purple) puts less down and invests the rest. <b>Don't buy</b> (dashed orange) keeps your cash invested but you keep paying rent. Rule of thumb: if your investment rate beats the loan rate, the mortgage line usually wins; otherwise cash is simpler and often higher.</div>
+        <div class="src" style="margin-top:10px"><b>Reading this chart:</b> the side axis is your total net worth in dollars (k = thousands); the bottom axis is years from now. Each line is one path. Whichever line is highest at the final year ends with the most money. <b>Buy with cash</b> (blue) ties up the most money but has no loan. <b>Buy with a mortgage</b> (purple) puts less down and invests the rest. <b>Don't buy</b> (dashed orange) keeps your cash invested but you keep paying rent. A mortgage usually comes out ahead when the cash you free up earns more than the loan rate; otherwise cash is simpler and often higher.</div>
       </div>
 
       <div class="card">
@@ -288,11 +288,11 @@
         <h2>Things baked in that you should know</h2>
         <div class="src">• <b>Most numbers are now real</b>, from the seller's 2025 profit-and-loss: apartment rent $3,500/mo, Pure Meridian $2,200/mo, HOA, and the actual repairs. Earlier placeholders have been replaced.</div>
         <div class="src">• <b>Pure Meridian's rent counts as income.</b> Once owned, Pure Meridian stops paying $2,200/mo to an outside landlord, and that saved rent is treated as income. It's an internal saving, not rent from a third party, so an outside buyer pricing only on the apartment's rent would value it differently. The "if you don't buy" comparison handles the other side.</div>
-        <div class="src">• <b>Property tax is the actual bill, not a % of price.</b> The $7,014 is the <b>school</b> tax; Chester County and the township bill separately (likely another $2,000–$4,000), so total tax is probably higher than shown. A sale can also prompt a reassessment. Replace with the full bill when known.</div>
+        <div class="src">• <b>Property tax is the actual bill, not a % of price.</b> The $7,014 is the <b>school</b> tax; Chester County and the township bill separately (likely another $2,000 to $4,000), so total tax is probably higher than shown. A sale can also prompt a reassessment. Replace with the full bill when known.</div>
         <div class="src">• <b>Insurance is an estimate (~$2,000).</b> The HOA master policy covers the building structure; the owner needs only a contents/liability/lost-rent policy. Replace with a real quote.</div>
         <div class="src">• <b>All figures are before income taxes</b> (no depreciation, mortgage-interest deduction, or capital-gains/recapture at sale).</div>
-        <div class="src">• <b>Exit value grows the price by appreciation</b>, so it doesn't re-price off the building's income — treat the long-run wealth/IRR as optimistic if you pay above the "Aim for this" price.</div>
-        <div class="src">• <b>Commercial use is allowed</b> — the covenants define a Commercial/Residential unit and expressly permit the ground-floor commercial use (Section 7.1.3).</div>
+        <div class="src">• <b>Exit value grows the price by appreciation</b>, so it doesn't re-price off the building's income. Treat the long-run wealth and IRR as optimistic if you pay above the "Aim for this" price.</div>
+        <div class="src">• <b>Commercial use is allowed.</b> The covenants define a Commercial/Residential unit and expressly permit the ground-floor commercial use (Section 7.1.3).</div>
         <div class="src" style="margin-top:8px;color:var(--warn)">⚠️ Still need: the <b>asking price</b> (none named yet), the <b>full property-tax bill</b> (county + township on top of the $7,014 school), a real <b>insurance quote</b>, and the post-2027 apartment rent (current lease ends Summer 2027 and may reset higher).</div>
       </div>
 
@@ -343,7 +343,7 @@ function read(){
 function grossRent(d){ return (d.rentUp + d.rentDown)*12; }
 
 // Operating expenses. Fixed-dollar costs inflate by `infl`; management scales with rent.
-// None depend on the purchase price — property tax is the actual bill, not a % of price.
+// None depend on the purchase price; property tax is the actual bill, not a % of price.
 function opex(d, gross, infl){
   infl = infl || 1;
   const collected = gross*(1 - d.vacancy*(d.rentUp/(d.rentUp+d.rentDown))); // vacancy on apartment share
@@ -389,7 +389,7 @@ function metricsAt(d, price){
 // ---- price solvers ----
 // NOI no longer depends on price, so cap-based prices are exact (price = NOI / cap).
 function priceForCap(d, cap){ return noiAt(d).noi / cap; }
-function solve(d, fn){ // bisection (fn decreasing in price) — used for break-even, which depends on price via debt service
+function solve(d, fn){ // bisection (fn decreasing in price); used for break-even, which depends on price via debt service
   let lo=50000, hi=5000000;
   for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(fn(mid)>0){lo=mid;}else{hi=mid;} }
   return (lo+hi)/2;
@@ -464,8 +464,8 @@ function render(){
   // verdict text
   const {noi}=noiAt(d);
   let v=`At <b>${fmt$(d.price)}</b>, the building earns about <b>${fmtPct(m.cap*100)}</b> a year if paid in cash. `;
-  v+= m.cf>=0 ? `After ${finMode==="cash"?"expenses":"the mortgage"}, it puts <b class="pos">${fmt$(m.cf/12)}/month</b> in your pocket. ` :
-                `After ${finMode==="cash"?"expenses":"the mortgage"}, it would cost <b class="neg">${fmt$(-m.cf/12)}/month</b> out of pocket. `;
+  v+= m.cf>=0 ? `After ${finMode==="cash"?"expenses":"the mortgage"}, you keep <b class="pos">${fmt$(m.cf/12)}/month</b>. ` :
+                `After ${finMode==="cash"?"expenses":"the mortgage"}, it costs you <b class="neg">${fmt$(-m.cf/12)}/month</b>. `;
   v+= `A price around <b>${fmt$(pT)}</b> hits the return you want. It still comes out even up to <b>${fmt$(pB)}</b>`;
   v+= pcFinite ? `, and above <b>${fmt$(pC)}</b> the money would do better invested elsewhere.`
               : `. The building's income plus ${(d.appr*100).toFixed(1)}% appreciation beats your ${(d.oppRate*100).toFixed(1)}% alternative at any sensible price, so there's no walk-away ceiling on returns alone.`;
