@@ -171,10 +171,10 @@
 
       <div class="card">
         <h2>Money coming in (per month)</h2>
-        <div class="row"><label>Upstairs apartment rent<span class="hint">what the tenant pays you</span></label><input type="number" id="rentUp" value="3600" step="50"></div>
-        <div class="row"><label>Ground floor rent (Pure Meridian)<span class="hint">what Pure Meridian pays now, at market</span></label><input type="number" id="rentDown" value="2200" step="50"></div>
+        <div class="row"><label>Upstairs apartment rent<span class="hint">actual: Yeager lease $3,500/mo (ends Summer 2027, may reset higher)</span></label><input type="number" id="rentUp" value="3500" step="50"></div>
+        <div class="row"><label>Ground floor rent (Pure Meridian)<span class="hint">actual: $2,200/mo</span></label><input type="number" id="rentDown" value="2200" step="50"></div>
         <div class="row"><label>Rent goes up each year (%)<span class="hint">typical local increase</span></label><input type="number" id="rentGrowth" value="2.9" step="0.1"></div>
-        <div class="row"><label>Empty / unpaid months (%)<span class="hint">cushion for the apartment sitting empty</span></label><input type="number" id="vacancy" value="5" step="0.5"></div>
+        <div class="row"><label>Empty / unpaid months (%)<span class="hint">cushion; 2025 actual was 0%</span></label><input type="number" id="vacancy" value="3" step="0.5"></div>
         <div class="chips">
           <span class="chip" title="Once the building is owned, Pure Meridian no longer pays rent to an outside landlord. That saved rent is counted as income.">Pure Meridian's rent stops going out, so it counts as income</span>
         </div>
@@ -182,12 +182,14 @@
 
       <div class="card">
         <h2>Money going out (per year)</h2>
-        <div class="row"><label>Property tax (% of price)<span class="hint">Chester County runs about 2.0%; see the note below</span></label><input type="number" id="taxPct" value="2.0" step="0.05"></div>
-        <div class="row"><label>Insurance ($/yr)</label><input type="number" id="insurance" value="3800" step="100"></div>
-        <div class="row"><label>Repairs & upkeep (% of rent)</label><input type="number" id="maintPct" value="8" step="0.5"></div>
+        <div class="row"><label>Property tax ($/yr)<span class="hint">actual school tax $7,014; add county+township when known. A fixed bill, not a % of price.</span></label><input type="number" id="tax" value="7014" step="100"></div>
+        <div class="row"><label>HOA fee ($/yr)<span class="hint">$700/mo going forward = $8,400; covers building structure/exterior insurance</span></label><input type="number" id="hoa" value="8400" step="100"></div>
+        <div class="row"><label>Insurance ($/yr)<span class="hint">estimate; owner policy for contents/liability/lost rent (HOA covers the structure)</span></label><input type="number" id="insurance" value="2000" step="100"></div>
+        <div class="row"><label>Repairs & upkeep ($/yr)<span class="hint">2025 actual ~$857 (HVAC + backflow); budget a bit more</span></label><input type="number" id="maint" value="1500" step="100"></div>
+        <div class="row"><label>Big-repair savings ($/yr)<span class="hint">reserve for HVAC/water-heater replacement</span></label><input type="number" id="capex" value="1500" step="100"></div>
         <div class="row"><label>Property manager (% of rent)<span class="hint">leave 0 if self-managed</span></label><input type="number" id="mgmtPct" value="0" step="0.5"></div>
-        <div class="row"><label>Big-repair savings (% of rent)<span class="hint">money set aside for roof, HVAC, etc.</span></label><input type="number" id="capexPct" value="5" step="0.5"></div>
-        <div class="row"><label>Other (utilities, etc., $/yr)</label><input type="number" id="other" value="2400" step="100"></div>
+        <div class="row"><label>Other ($/yr)<span class="hint">tenants pay their own utilities; 0 by default</span></label><input type="number" id="other" value="0" step="100"></div>
+        <div class="src" style="margin-top:6px">Fixed costs above grow each year at the rent-growth rate.</div>
       </div>
 
       <div class="card">
@@ -284,23 +286,22 @@
 
       <div class="card">
         <h2>Things baked in that you should know</h2>
-        <div class="src">• <b>Pure Meridian's rent counts as income.</b> Once the building is owned, Pure Meridian stops paying ~$2,200/mo to an outside landlord, and that saved rent is treated as income. This is an internal saving rather than rent collected from a third party, so an outside buyer pricing the building purely on the apartment's rent would value it differently. The "if you don't buy" comparison handles the other side of this.</div>
-        <div class="src">• <b>Property tax is estimated as 2% of the price.</b> In reality PA tax is based on the county's <b>assessed value</b>, not what you pay, and a sale can trigger a reassessment. Use the actual tax bill once it's known; it could be higher or lower.</div>
-        <div class="src">• <b>All figures are before income taxes.</b> Owning rental property has real tax effects (mortgage interest and depreciation lower the tax bill; rental income raises it). None of that is modeled here.</div>
-        <div class="src">• <b>Both spaces are valued at full market rent</b>, with a small cushion for the apartment sitting empty. The ground floor assumes Pure Meridian's space stays occupied.</div>
-        <div class="src">• <b>Future growth is a straight-line estimate.</b> Rent, building value, and the "invest it elsewhere" return all assume steady yearly growth; the real world is bumpier.</div>
-        <div class="src" style="margin-top:8px;color:var(--warn)">⚠️ Still need real numbers for: the actual asking price ($600k is a comp-based starting point, not an offer), the county's assessed value and tax bill, the real square-foot split between floors, the lease terms, and who pays the utilities.</div>
+        <div class="src">• <b>Most numbers are now real</b>, from the seller's 2025 profit-and-loss: apartment rent $3,500/mo, Pure Meridian $2,200/mo, HOA, and the actual repairs. Earlier placeholders have been replaced.</div>
+        <div class="src">• <b>Pure Meridian's rent counts as income.</b> Once owned, Pure Meridian stops paying $2,200/mo to an outside landlord, and that saved rent is treated as income. It's an internal saving, not rent from a third party, so an outside buyer pricing only on the apartment's rent would value it differently. The "if you don't buy" comparison handles the other side.</div>
+        <div class="src">• <b>Property tax is the actual bill, not a % of price.</b> The $7,014 is the <b>school</b> tax; Chester County and the township bill separately (likely another $2,000–$4,000), so total tax is probably higher than shown. A sale can also prompt a reassessment. Replace with the full bill when known.</div>
+        <div class="src">• <b>Insurance is an estimate (~$2,000).</b> The HOA master policy covers the building structure; the owner needs only a contents/liability/lost-rent policy. Replace with a real quote.</div>
+        <div class="src">• <b>All figures are before income taxes</b> (no depreciation, mortgage-interest deduction, or capital-gains/recapture at sale).</div>
+        <div class="src">• <b>Exit value grows the price by appreciation</b>, so it doesn't re-price off the building's income — treat the long-run wealth/IRR as optimistic if you pay above the "Aim for this" price.</div>
+        <div class="src">• <b>Commercial use is allowed</b> — the covenants define a Commercial/Residential unit and expressly permit the ground-floor commercial use (Section 7.1.3).</div>
+        <div class="src" style="margin-top:8px;color:var(--warn)">⚠️ Still need: the <b>asking price</b> (none named yet), the <b>full property-tax bill</b> (county + township on top of the $7,014 school), a real <b>insurance quote</b>, and the post-2027 apartment rent (current lease ends Summer 2027 and may reset higher).</div>
       </div>
 
       <div class="card">
-        <h2>Where the starting numbers came from</h2>
-        <div class="src">• Property: ~3,000 sqft office/mixed building, 670 Wharton Blvd, fully occupied (Swope Lees Commercial listing).</div>
-        <div class="src">• <b>$600k starting price is from same-street sales:</b> 686 Wharton Blvd, the near-identical mixed-use building next door (residential over commercial), sold for $630,000 (it's larger at 3,884 sqft, ≈ $162/sqft); 435 Wharton Blvd (2,815 sqft) sold $575,000 in May 2025 (≈ $204/sqft). $600k for ~3,000 sqft sits between those and near the income-based target below.</div>
-        <div class="src">• Upstairs ≈ $3,600/mo: a 3BR/2.5BA townhouse in 19341 rents $3,650 (Homes.com / Zumper, Jun 2026).</div>
-        <div class="src">• Ground floor: Pure Meridian pays $2,200/mo ≈ market for ~1,500 sqft Exton office ($17/sqft/yr, OfficeSpace/CityFeet).</div>
-        <div class="src">• Commercial mortgage ≈ 6.5% (SelectCommercial / CommercialLoanDirect, Jun 13 2026: conventional 5.43 to 8.75%).</div>
-        <div class="src">• Chester Co. effective property tax ≈ 2.0%; home values rising ~3%/yr (Zillow Chester Co.).</div>
-        <div class="src">• Rent growth 2.9% = Exton year-over-year median rent change (ApartmentList/Zumper).</div>
+        <h2>Where the numbers came from</h2>
+        <div class="src">• <b>Rents, HOA, taxes, repairs:</b> the seller's 2025 P&L for 674/670 Wharton Blvd. Apartment (Yeager) $3,500/mo, Pure Meridian (Tricia) $2,200/mo, HOA $642→$700/mo, school tax $7,014, repairs ~$857 (HVAC + backflow).</div>
+        <div class="src">• <b>Commercial use & HOA scope:</b> the community's Declaration, Bylaws, and Rules (Edgeware). HOA master policy insures the building structure.</div>
+        <div class="src">• <b>$600k reference price (no offer yet):</b> 686 Wharton Blvd next door (near-identical mixed-use) sold $630,000; 435 Wharton Blvd sold $575,000 (May 2025).</div>
+        <div class="src">• Commercial mortgage ≈ 6.5% (SelectCommercial / CommercialLoanDirect, Jun 2026). Appreciation ~3%/yr, rent growth 2.9% (Exton, ApartmentList/Zumper).</div>
       </div>
 
       <div class="foot" id="foot"></div>
@@ -330,35 +331,38 @@ function read(){
   return {
     price:v('price'), closingPct:v('closingPct'),
     rentUp:v('rentUp'), rentDown:v('rentDown'), rentGrowth:v('rentGrowth')/100, vacancy:v('vacancy')/100,
-    taxPct:v('taxPct')/100, insurance:v('insurance'), maintPct:v('maintPct')/100,
-    mgmtPct:v('mgmtPct')/100, capexPct:v('capexPct')/100, other:v('other'),
+    tax:v('tax'), hoa:v('hoa'), insurance:v('insurance'), maint:v('maint'),
+    mgmtPct:v('mgmtPct')/100, capex:v('capex'), other:v('other'),
     downPct:v('downPct')/100, rate:v('rate')/100, amort:v('amort'),
     targetCap:v('targetCap')/100, oppRate:v('oppRate')/100, appr:v('appr')/100,
     hold:v('hold'), sellCost:v('sellCost')/100, altRent:v('altRent')
   };
 }
 
-// gross scheduled rent (annual) at a given price-independent rent level
+// gross scheduled rent (annual)
 function grossRent(d){ return (d.rentUp + d.rentDown)*12; }
 
-// operating expenses depend on price (tax) + rent
-function opex(d, price, gross){
-  const collected = gross*(1 - d.vacancy*(d.rentUp/(d.rentUp+d.rentDown))); // vacancy on upstairs share
+// Operating expenses. Fixed-dollar costs inflate by `infl`; management scales with rent.
+// None depend on the purchase price — property tax is the actual bill, not a % of price.
+function opex(d, gross, infl){
+  infl = infl || 1;
+  const collected = gross*(1 - d.vacancy*(d.rentUp/(d.rentUp+d.rentDown))); // vacancy on apartment share
   return {
-    tax: price*d.taxPct,
-    insurance: d.insurance,
-    maint: gross*d.maintPct,
+    tax: d.tax*infl,
+    hoa: d.hoa*infl,
+    insurance: d.insurance*infl,
+    maint: d.maint*infl,
+    capex: d.capex*infl,
+    other: d.other*infl,
     mgmt: collected*d.mgmtPct,
-    capex: gross*d.capexPct,
-    other: d.other,
     collected
   };
 }
-function noiAt(d, price){
+function noiAt(d){
   const gross = grossRent(d);
-  const ox = opex(d, price, gross);
+  const ox = opex(d, gross, 1);
   const egi = ox.collected;
-  const totalOp = ox.tax+ox.insurance+ox.maint+ox.mgmt+ox.capex+ox.other;
+  const totalOp = ox.tax+ox.hoa+ox.insurance+ox.maint+ox.mgmt+ox.capex+ox.other;
   return {gross, egi, totalOp, noi: egi-totalOp, ox};
 }
 
@@ -369,7 +373,7 @@ function annualDebtService(d, price){
 }
 
 function metricsAt(d, price){
-  const {noi} = noiAt(d, price);
+  const {noi} = noiAt(d);
   const ds = annualDebtService(d, price);
   const cashInvested = finMode==="cash" ? price*(1+d.closingPct/100)
                                         : price*d.downPct + price*(d.closingPct/100);
@@ -383,14 +387,13 @@ function metricsAt(d, price){
 }
 
 // ---- price solvers ----
-function targetPrice(d){ return noiAt(d, d.price).noi / d.targetCap; } // NOI ~ price-insensitive except tax
-// because tax depends on price, solve by iteration
-function solve(d, fn){ // find price where fn(price)=0 via bisection (fn decreasing in price)
+// NOI no longer depends on price, so cap-based prices are exact (price = NOI / cap).
+function priceForCap(d, cap){ return noiAt(d).noi / cap; }
+function solve(d, fn){ // bisection (fn decreasing in price) — used for break-even, which depends on price via debt service
   let lo=50000, hi=5000000;
   for(let i=0;i<60;i++){ const mid=(lo+hi)/2; if(fn(mid)>0){lo=mid;}else{hi=mid;} }
   return (lo+hi)/2;
 }
-function priceForCap(d, cap){ return solve(d, p => noiAt(d,p).noi/p - cap); }
 function breakEvenPrice(d){ return solve(d, p => metricsAt(d,p).cf); } // cf=0
 // Walk-away ceiling: price where the building's TOTAL unleveraged return (income yield + appreciation)
 // drops to your opportunity cost. Compares like-for-like (total vs total), not income-yield vs total-return.
@@ -407,9 +410,10 @@ function project(d, price, mode){
   const cashIn = mode==="cash"? price*(1+d.closingPct/100) : price*d.downPct + price*(d.closingPct/100);
   for(let y=1;y<=d.hold;y++){
     const g = (d.rentUp+d.rentDown)*12*Math.pow(1+d.rentGrowth,y-1);
-    const ox = opex(d, price*Math.pow(1+d.appr,y-1), g);
+    const infl = Math.pow(1+d.rentGrowth,y-1);   // fixed costs (tax, HOA, etc.) inflate at the rent-growth rate
+    const ox = opex(d, g, infl);
     const egi = ox.collected;
-    const noi = egi - (ox.tax+ox.insurance+ox.maint+ox.mgmt+ox.capex+ox.other);
+    const noi = egi - (ox.tax+ox.hoa+ox.insurance+ox.maint+ox.mgmt+ox.capex+ox.other);
     const ds = mode==="cash"?0: pmt(d.rate/12,d.amort*12,loan0)*12;
     const cf = noi-ds; cumCF+=cf;
     const value = price*Math.pow(1+d.appr,y);
@@ -458,7 +462,7 @@ function render(){
   $('recPrice').textContent = fmt$(pT);
 
   // verdict text
-  const {noi}=noiAt(d,d.price);
+  const {noi}=noiAt(d);
   let v=`At <b>${fmt$(d.price)}</b>, the building earns about <b>${fmtPct(m.cap*100)}</b> a year if paid in cash. `;
   v+= m.cf>=0 ? `After ${finMode==="cash"?"expenses":"the mortgage"}, it puts <b class="pos">${fmt$(m.cf/12)}/month</b> in your pocket. ` :
                 `After ${finMode==="cash"?"expenses":"the mortgage"}, it would cost <b class="neg">${fmt$(-m.cf/12)}/month</b> out of pocket. `;
@@ -468,18 +472,19 @@ function render(){
   $('verdict').innerHTML = v;
 
   // NOI table
-  const ox=noiAt(d,d.price).ox;
+  const nz=noiAt(d), ox=nz.ox;
   $('noiTable').querySelector('tbody').innerHTML = `
     <tr><td>Upstairs apartment rent</td><td>${fmt$(d.rentUp*12)}</td></tr>
     <tr><td>Ground floor (Pure Meridian rent, now saved)</td><td>${fmt$(d.rentDown*12)}</td></tr>
-    <tr><td>Total rent in a full year</td><td>${fmt$(noiAt(d,d.price).gross)}</td></tr>
-    <tr><td>Minus empty / unpaid months</td><td>${fmt$(ox.collected-noiAt(d,d.price).gross)}</td></tr>
+    <tr><td>Total rent in a full year</td><td>${fmt$(nz.gross)}</td></tr>
+    <tr><td>Minus empty / unpaid months</td><td>${fmt$(ox.collected-nz.gross)}</td></tr>
     <tr><td><b>Rent you actually count on</b></td><td><b>${fmt$(ox.collected)}</b></td></tr>
-    <tr><td>Property tax</td><td>${fmt$(-ox.tax)}</td></tr>
+    <tr><td>Property tax (actual bill)</td><td>${fmt$(-ox.tax)}</td></tr>
+    <tr><td>HOA fee</td><td>${fmt$(-ox.hoa)}</td></tr>
     <tr><td>Insurance</td><td>${fmt$(-ox.insurance)}</td></tr>
     <tr><td>Repairs & upkeep</td><td>${fmt$(-ox.maint)}</td></tr>
-    <tr><td>Property manager</td><td>${fmt$(-ox.mgmt)}</td></tr>
     <tr><td>Big-repair savings</td><td>${fmt$(-ox.capex)}</td></tr>
+    <tr><td>Property manager</td><td>${fmt$(-ox.mgmt)}</td></tr>
     <tr><td>Other</td><td>${fmt$(-ox.other)}</td></tr>
     <tr><td><b>Yearly profit (before any loan)</b></td><td><b class="pos">${fmt$(noi)}</b></td></tr>`;
 
@@ -570,7 +575,7 @@ function drawWealth(d,pc,pm2,netSale,investAll,investDiff,altRentPaid){
 function drawSens(d){
   const pts=[]; const base=priceForCap(d,d.targetCap);
   for(let p=Math.max(300000,base*0.6);p<=base*1.5;p+=(base*0.9)/20){
-    pts.push({p, cap:noiAt(d,p).noi/p*100, coc:metricsAt(d,p).coc*100});
+    pts.push({p, cap:noiAt(d).noi/p*100, coc:metricsAt(d,p).coc*100});
   }
   const labels=pts.map(x=>'$'+Math.round(x.p/1000)+'k');
   const opts=baseChartOpts(); opts.scales.y.ticks.callback=v=>v.toFixed(0)+'%';
